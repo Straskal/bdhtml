@@ -1,4 +1,4 @@
-import {ScaleStrategy} from "./scale-strategy";
+import {ScaleStrategy} from "vendor/dacaher/pixi-app-wrapper/stage/scale/scale-strategy";
 
 export class ScaleKeepAspectRatio implements ScaleStrategy {
     public scale(initialWidth: number, initialHeight: number, finalWidth: number, finalHeight: number): { scaleX: number; scaleY: number; } {

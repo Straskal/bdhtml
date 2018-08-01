@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 
 export class Engine {
     public app: PIXI.Application;
+    public loader: PIXI.loaders.Loader;
 
     private sprite: PIXI.Sprite;
 
@@ -12,7 +13,7 @@ export class Engine {
             width: 800,
             height: 600,
             backgroundColor: 0x061639,
-            view: canvas
+            view: canvas,
         });
         
     }

@@ -25,8 +25,8 @@ module.exports = {
     plugins: [
         new CheckerPlugin(),
         new HtmlWebpackPlugin({
-            title: 'My PIXI App',
-            template: 'src/html/index.html',
+            title: 'Butt Dragons',
+            template: 'src/index.html',
             hash: true,
             minify: {
                 collapseWhitespace: true

@@ -6,8 +6,8 @@ import {
     PixiAppWrapper as Wrapper,
     pixiAppWrapperEvent as WrapperEvent,
     PixiAppWrapperOptions as WrapperOpts,
-} from "pixi-app-wrapper";
-import {Asset, AssetPriority, LoadAsset, PixiAssetsLoader, SoundAsset} from "pixi-assets-loader";
+} from "vendor/dacaher/pixi-app-wrapper";
+import {Asset, AssetPriority, LoadAsset, PixiAssetsLoader, SoundAsset} from "vendor/dacaher/pixi-assets-loader";
 import {
     AsciiFilter,
     CRTFilter,

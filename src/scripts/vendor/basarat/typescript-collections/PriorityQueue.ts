@@ -1,5 +1,5 @@
-import * as util from './util';
-import Heap from './Heap';
+import * as util from 'vendor/basarat/typescript-collections/util';
+import Heap from 'vendor/basarat/typescript-collections/Heap';
 
 export default class PriorityQueue<T> {
 

@@ -1,5 +1,5 @@
-import {EventEmitter} from "eventemitter3";
-import PriorityQueue from "typescript-collections/PriorityQueue";
+import {EventEmitter} from "vendor/primus/eventemitter3";
+import PriorityQueue from "vendor/basarat/typescript-collections/PriorityQueue";
 
 export interface Asset {
     id: string;
