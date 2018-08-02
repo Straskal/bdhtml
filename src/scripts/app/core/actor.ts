@@ -14,15 +14,17 @@ export class Actor {
 
     public scene: Scene;
 
-    private components: Behavior[] = [];
+    private components: Behavior[];
     private componentsById: Map<number, Behavior>;
-    private componentsToAdd: Behavior[] = [];
-    private componentsToRemove: Behavior[] = [];
+    private componentsToAdd: Behavior[];
+    private componentsToRemove: Behavior[];
 
     constructor(name: string, x: number, y: number) {
         this.idGen = new IdGenerator();
         this.name = name;
         this.pos = new Vector2(x, y);
+
+        this.components = new Behavior[0];
     }
 
     public addComponent(component: Behavior): void {

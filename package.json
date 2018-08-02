@@ -19,6 +19,8 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^10.5.5",
+    "@types/pixi.js": "^4.8.0",
     "awesome-typescript-loader": "^3.4.1",
     "css-loader": "^0.28.9",
     "extract-text-webpack-plugin": "^3.0.2",
