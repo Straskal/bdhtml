@@ -2,9 +2,13 @@
   "name": "bd",
   "version": "1.0.0",
   "description": "bdhtml",
-  "main": "main.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.prod.config.js",
+    "serve": "http-server dist",
+    "build-d": "webpack --config webpack.dev.config.js",
+    "serve-d": "http-server dev"
   },
   "repository": {
     "type": "git",
@@ -19,5 +23,8 @@
   "devDependencies": {
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.10"
   }
 }
