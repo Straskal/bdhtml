@@ -8,7 +8,7 @@
     "build": "webpack --config webpack.prod.config.js",
     "serve": "http-server dist",
     "build-d": "webpack --config webpack.dev.config.js",
-    "serve-d": "http-server dev"
+    "serve-d": "webpack-dev-server --config webpack.dev.config --open"
   },
   "repository": {
     "type": "git",
