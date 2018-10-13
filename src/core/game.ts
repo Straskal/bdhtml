@@ -62,11 +62,6 @@ export class Game {
         if (Keyboard.isKeyDown(KeyCode.KEY_A)) {
             this.actor.pos.x -= 1 * 50 * this.dt;
         }    
-
-        while (this.dt > this.step) {
-            this.dt = this.dt - this.step;
-            // fixedUpdate(dt);
-        }
         
         if (this.context !== null) {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
