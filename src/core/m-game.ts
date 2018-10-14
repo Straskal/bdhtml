@@ -1,7 +1,11 @@
-import { Actor } from "./actor";
-import { Keyboard, KeyCode } from "../input/keyboard";
+import { Keyboard } from "../input/keyboard";
+import { Level } from "./level";
 
-export class Game {
+export interface MGameStartOptions {
+    startLevel: Level;
+}
+
+export class MGame {
     public canvas: HTMLCanvasElement;
     public context: CanvasRenderingContext2D | null;
 
@@ -12,13 +16,15 @@ export class Game {
 
     private interval: number;
 
-    private actor: Actor;
+    private currentLevel: Level;
 
-    constructor() {
+    constructor(startOpts: MGameStartOptions) {
         this.now = 0;
         this.dt = 0;
         this.last = this.timestamp();
         this.step = 1 / 60;
+
+        this.currentLevel = startOpts.startLevel;
     }
 
     public initialize(): void {
@@ -37,15 +43,7 @@ export class Game {
         
         document.body.insertBefore(resDiv, document.body.childNodes[0]);
 
-        if (this.context !== null) {
-            this.context.fillStyle = "red";
-            this.context.fillRect(10, 10, 32, 32);
-        }
-
-        this.actor = new Actor();
-        this.actor.width = 32;
-        this.actor.height = 32;
-        this.actor.color = "red";
+        this.currentLevel.start();
 
         this.update();
     }
@@ -56,20 +54,12 @@ export class Game {
         this.now = this.timestamp();
         this.dt = this.dt + Math.min(1, (this.now - this.last) / 1000);
 
-        if (Keyboard.isKeyDown(KeyCode.KEY_D)) {
-            this.actor.pos.x += 1 * 50 * this.dt;
-        }        
-        if (Keyboard.isKeyDown(KeyCode.KEY_A)) {
-            this.actor.pos.x -= 1 * 50 * this.dt;
-        }    
+        this.currentLevel.update(this.dt);
         
         if (this.context !== null) {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.context.fillStyle = "black";
             this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        }
-        if (this.context !== null) {
-            this.actor.draw(this.context);
         }
 
         this.last = this.now;

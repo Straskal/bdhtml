@@ -4,7 +4,7 @@
   "description": "bdhtml",
   "private": true,
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.spec.ts",
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "build": "webpack --config webpack.prod.config.js",
     "serve": "http-server dist",
     "build-d": "webpack --config webpack.dev.config.js",
