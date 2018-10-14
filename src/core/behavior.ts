@@ -2,7 +2,6 @@ import { Entity } from "./entity";
 
 export abstract class Behavior {
 
-    private _id: number = -1;
     protected _needsUpdate: boolean = false;
 
     public _owner: Entity;

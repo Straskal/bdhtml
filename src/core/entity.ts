@@ -3,13 +3,14 @@ import { IdGenerator } from "../utils/id-generator";
 import { KeyedCollection } from "../utils/keyed-collection";
 import { Vector2 } from "../math/vector2";
 import { Level } from "./level";
+import { SceneNode } from "./scene-node";
 
 export interface IEntityOptions {
     name: string;
     behaviors: Behavior[];
 }
 
-export class Entity {
+export class Entity extends SceneNode {
 
     private _id: number = -1;
     private _name: string = "";
@@ -36,15 +37,13 @@ export class Entity {
     }
 
     constructor(opt: IEntityOptions) {
+        super();
+
         this._name = opt.name;
 
         for (let b of opt.behaviors) {
             b._owner = this;
             this._behaviorsById.add(this._idGen.getId(), b);
-
-            if (b.needsUpdate) {
-                this._behaviorsToUpdate.push(b);
-            }
         }
     }
 
@@ -77,7 +76,11 @@ export class Entity {
     }
 
     public preStart(): void {
+        // NOTICE: Calling .values() multiple times per frame
         for (let b of this._behaviorsById.values()) {
+            if (b.needsUpdate) {
+                this._behaviorsToUpdate.push(b);
+            }
             b.preStart();
         }
     }

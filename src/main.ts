@@ -3,6 +3,7 @@ import { Level } from "./core/level";
 import { Entity } from "./core/entity";
 import { Behavior } from "./core/behavior";
 import { Keyboard, KeyCode } from "./input/keyboard";
+import { Sprite } from "./core/sprite";
 
 class TestBehavior extends Behavior {
 
@@ -28,7 +29,8 @@ window.onload = () => {
     let e = new Entity({
         name: "steve",
         behaviors: [
-            new TestBehavior()
+            new TestBehavior(),
+            new Sprite("assets/player.png")
         ]
     });
     level.addEntity(e);

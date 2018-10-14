@@ -1,6 +1,7 @@
 import { KeyedCollection } from "../utils/keyed-collection";
 import { Entity } from "./entity";
 import { IdGenerator } from "../utils/id-generator";
+import { Sprite } from "./sprite";
 
 export class Level {
 
@@ -26,8 +27,26 @@ export class Level {
         return this._entitiesById.item(id);
     }
 
+    public preStart(): void {
+        while (this._entitiesToRemove.length !== 0) {
+            let eId = <number>this._entitiesToRemove.pop();
+            let e = this.getEntityById(eId);
+            e.end();
+            this._entitiesById.remove(eId);
+        }
+
+        for (let e of this._entitiesToAdd) {
+            e._setLevel(this);
+            e._setId(this._idGen.getId());
+            e.preStart();
+            this._entitiesById.add(e.id, e);
+        }
+    }
+
     public start(): void {
-        this._updateEntityLists();
+        for (let e of this._entitiesById.values()) {
+            e.start();
+        }
     }
 
     public update(dt: number): void {
@@ -38,12 +57,19 @@ export class Level {
         }
     }
 
-    public draw(): void {
-
+    public draw(ctx: CanvasRenderingContext2D): void {
+        for(let e of this._entitiesById.values()) {
+            let s = e.getBehaviorOfType(Sprite);
+            if (s != null) {
+                ctx.drawImage(s.texture, e.position.x, e.position.y);
+            }
+        }
     }
 
     public end(): void {
-        
+        for (let e of this._entitiesById.values()) {
+            e.end();
+        }
     }
 
     private _updateEntityLists(): void {

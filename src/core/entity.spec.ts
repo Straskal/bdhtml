@@ -122,6 +122,7 @@ describe('Entity', () => {
             };
 
             let entity = new Entity(entityOptions);
+            entity.preStart();
 
             // act
             entity.update(1);

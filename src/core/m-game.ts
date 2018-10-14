@@ -1,5 +1,6 @@
 import { Keyboard } from "../input/keyboard";
 import { Level } from "./level";
+import { ResourceLoader } from "../utils/resource-loader";
 
 export interface MGameStartOptions {
     startLevel: Level;
@@ -8,6 +9,7 @@ export interface MGameStartOptions {
 export class MGame {
     public canvas: HTMLCanvasElement;
     public context: CanvasRenderingContext2D | null;
+    public resLoader: ResourceLoader = new ResourceLoader();
 
     private now: number;
     private dt: number;
@@ -43,9 +45,10 @@ export class MGame {
         
         document.body.insertBefore(resDiv, document.body.childNodes[0]);
 
-        this.currentLevel.start();
-
-        this.update();
+        this.currentLevel.preStart();
+        ResourceLoader.getInstance().load(() => {
+            requestAnimationFrame(this.update.bind(this));
+        });
     }
 
     private update(): void {
@@ -60,9 +63,12 @@ export class MGame {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.context.fillStyle = "black";
             this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+            this.currentLevel.draw(this.context);
         }
 
         this.last = this.now;
+
         requestAnimationFrame(this.update.bind(this));
     }
 
