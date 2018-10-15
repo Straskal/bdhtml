@@ -8,13 +8,14 @@ import { SceneNode } from "./scene-node";
 export interface IEntityOptions {
     name: string;
     behaviors: Behavior[];
+    position: Vector2;
 }
 
 export class Entity extends SceneNode {
 
     private _id: number = -1;
     private _name: string = "";
-    private _position: Vector2 = new Vector2(0, 0);
+    private _position: Vector2;
 
     private _behaviorsById: KeyedCollection<Behavior> = new KeyedCollection<Behavior>();
     private _behaviorsToUpdate: Behavior[] = [];
@@ -45,6 +46,8 @@ export class Entity extends SceneNode {
             b._owner = this;
             this._behaviorsById.add(this._idGen.getId(), b);
         }
+
+        this._position = opt.position;
     }
 
     public _setId(id: number): void {

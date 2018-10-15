@@ -1,15 +1,16 @@
 import { Keyboard } from "../input/keyboard";
 import { Level } from "./level";
 import { ResourceLoader } from "../utils/resource-loader";
+import { Module } from "./module";
 
 export interface MGameStartOptions {
     startLevel: Level;
+    modules: Module[];
 }
 
 export class MGame {
     public canvas: HTMLCanvasElement;
     public context: CanvasRenderingContext2D | null;
-    public resLoader: ResourceLoader = new ResourceLoader();
 
     private now: number;
     private dt: number;
@@ -17,6 +18,8 @@ export class MGame {
     private step: number;
 
     private interval: number;
+
+    public _modules: Module[];
 
     private currentLevel: Level;
 
@@ -27,6 +30,8 @@ export class MGame {
         this.step = 1 / 60;
 
         this.currentLevel = startOpts.startLevel;
+        this.currentLevel.game = this;
+        this._modules = startOpts.modules;
     }
 
     public initialize(): void {
@@ -47,7 +52,8 @@ export class MGame {
 
         this.currentLevel.preStart();
         ResourceLoader.getInstance().load(() => {
-            requestAnimationFrame(this.update.bind(this));
+            this.currentLevel.start();
+            this.update();
         });
     }
 
@@ -58,13 +64,15 @@ export class MGame {
         this.dt = this.dt + Math.min(1, (this.now - this.last) / 1000);
 
         this.currentLevel.update(this.dt);
+
+        for (let m of this._modules) {
+            m.update(this.dt);
+        }
         
         if (this.context !== null) {
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.context.fillStyle = "black";
-            this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-            this.currentLevel.draw(this.context);
+            for (let m of this._modules) {
+                m.draw(this.context);
+            }
         }
 
         this.last = this.now;

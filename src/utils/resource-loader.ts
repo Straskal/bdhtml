@@ -22,16 +22,10 @@ export class ResourceLoader {
 
     private static _instance: ResourceLoader;
 
-    constructor() {
-        ResourceLoader.setInst(this);
-    }
+    private constructor() { }
 
-    static getInstance(): ResourceLoader {
-        return this._instance;
-    }
-
-    static setInst(Res: ResourceLoader) {
-        this._instance = Res;
+    public static getInstance(): ResourceLoader {
+        return this._instance || (this._instance = new ResourceLoader());
     }
 
     public getResource<T extends HTMLImageElement | HTMLAudioElement>(path: string): T {
@@ -49,18 +43,19 @@ export class ResourceLoader {
 
     public load(onComplete: Function) {
         this._loadCount = this._queue.length;
-        for (let qd in this._queue) {
+        for (let qd of this._queue) {
             console.log(path.extname(qd));
             if (this._imgExts.some(x => x === path.extname(qd))) {
                 let image = new Image();
+                let that = this;
                 image.addEventListener("load", () => {
-                    this._loadedCount++;
-                    if (this._loadedCount === this._loadCount) {
+                    that._loadedCount++;
+                    if (that._loadedCount === that._loadCount) {
                         onComplete();
                     }
                 });
                 image.src = qd;
-                this._cache.add(qd, image);
+                that._cache.add(qd, image);
             }
             if (this._audExts.some(x => x === path.extname(qd))) {
                 let audio = new Audio();

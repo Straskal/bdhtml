@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 import { Behavior } from './behavior';
 import { Entity } from './entity';
+import { Vector2 } from '../math/vector2';
 
 class TestBehavior extends Behavior { }
 
@@ -13,7 +14,8 @@ describe('Entity', () => {
                 name: "Steve",
                 behaviors: [
                     new TestBehavior()
-                ]
+                ],
+                position: new Vector2()
             };
 
             // act
@@ -34,7 +36,8 @@ describe('Entity', () => {
                 name: "Steve",
                 behaviors: [
                     expectedBehavior
-                ]
+                ],
+                position: new Vector2()
             };
 
             let entity = new Entity(entityOptions);
@@ -55,7 +58,8 @@ describe('Entity', () => {
                 name: "Steve",
                 behaviors: [
                     expectedBehavior
-                ]
+                ],
+                position: new Vector2()
             };
 
             let entity = new Entity(entityOptions);
@@ -84,7 +88,8 @@ describe('Entity', () => {
                 behaviors: [
                     behavior,
                     behavior2
-                ]
+                ],
+                position: new Vector2()
             };
 
             let entity = new Entity(entityOptions);
@@ -118,7 +123,8 @@ describe('Entity', () => {
                 behaviors: [
                     behavior,
                     behavior2
-                ]
+                ],
+                position: new Vector2()
             };
 
             let entity = new Entity(entityOptions);

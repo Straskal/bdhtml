@@ -17,10 +17,10 @@ export class Sprite extends Behavior {
     }
 
     public preStart(): void {
-        ResourceLoader.getInstance().queue(["res/player.png"]);
+        ResourceLoader.getInstance().queue([this._path]);
     }
 
     public start() {
-        this._texture = ResourceLoader.getInstance().getResource<HTMLImageElement>("assets/player.png");
+        this._texture = ResourceLoader.getInstance().getResource<HTMLImageElement>(this._path);
     }
 }
