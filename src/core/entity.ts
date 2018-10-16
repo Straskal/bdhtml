@@ -4,6 +4,7 @@ import { KeyedCollection } from "../utils/keyed-collection";
 import { Vector2 } from "../math/vector2";
 import { Level } from "./level";
 import { SceneNode } from "./scene-node";
+import { EventEmitter } from "events";
 
 export interface IEntityOptions {
     name: string;
@@ -21,6 +22,7 @@ export class Entity extends SceneNode {
     private _behaviorsToUpdate: Behavior[] = [];
 
     private _idGen: IdGenerator = new IdGenerator();
+    private _eventEmitter: EventEmitter = new EventEmitter();
 
     private _level: Level;
 
@@ -39,7 +41,6 @@ export class Entity extends SceneNode {
 
     constructor(opt: IEntityOptions) {
         super();
-
         this._name = opt.name;
 
         for (let b of opt.behaviors) {
@@ -104,5 +105,17 @@ export class Entity extends SceneNode {
         for (let b of this._behaviorsById.values()) {
             b.end();
         }
+    }
+
+    public on(event: string, func: (...args: any[]) => void): void {
+        this._eventEmitter.on(event, func);
+    }
+
+    public emit(event: string, ...args: any[]): void {
+        this._eventEmitter.emit(event, args);
+    }
+
+    public off(event: string, func: (...args: any[]) => void): void {
+        this._eventEmitter.off(event, func);
     }
 }
