@@ -3,7 +3,7 @@ import { Entity } from "../entity";
 import { KeyedCollection } from "../../utils/keyed-collection";
 import { Sprite } from "../components/sprite";
 
-export class Renderer implements IRenderSystem {
+export class RenderSystem implements IRenderSystem {
 
     private _spritesById: KeyedCollection<Sprite>;
 
