@@ -13,7 +13,10 @@ export class Vector2 {
         return Math.sqrt(Vector2.dot(this, this));
     }
 
-    // static operations
+    static get zero(): Vector2 {
+        return new Vector2(0, 0);
+    }
+
     static add(v1: Vector2, v2: Vector2): Vector2 {
         return new Vector2(v1.x + v2.x, v1.y + v2.y);
     }

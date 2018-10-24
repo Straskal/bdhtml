@@ -1,72 +1,59 @@
 import { StrKeyedCollection } from "./keyed-collection";
 import * as path from 'path';
 
+const IMAGE_EXT = ['.jpg', '.png'];
+
 export class ResourceLoader {
 
-    private _cache: StrKeyedCollection<any> = new StrKeyedCollection<any>();
-    private _queue: Array<string> = [];
+    private _cache: StrKeyedCollection<any>;
+    private _queue: StrKeyedCollection<Function[]>;
     private _loadCount: number = 0;
     private _loadedCount: number = 0;
 
-    private _imgExts: string[] = [
-        ".jpg",
-        ".png"
-    ];
-    private _audExts: string[] = [
-        ".wav"
-    ];
-
-    get isDone(): boolean {
-        return this._loadedCount === this._loadCount;
-    }
-
-    private static _instance: ResourceLoader;
-
-    private constructor() { }
-
-    public static getInstance(): ResourceLoader {
-        return this._instance || (this._instance = new ResourceLoader());
+    constructor() {
+        this._cache = new StrKeyedCollection<any>();
+        this._queue = new StrKeyedCollection<Function[]>();
     }
 
     public getResource<T extends HTMLImageElement | HTMLAudioElement>(path: string): T {
         return this._cache.item(path) as T;
     }
 
-    public queue(res: string[]): void {
-        for (let i of res) {
-            if (this._imgExts.some(x => x === i)) {
-                continue;
-            }
-            this._queue.push(i);
+    public queue(res: string, callback: (img: HTMLImageElement) => void): void {
+        if (this._queue.containsKey(res)) {
+            let resource = this._queue.item(res);
+            resource.push(callback);
+            return;
         }
+        this._queue.add(res, [callback]);
     }
 
     public load(onComplete: Function) {
-        this._loadCount = this._queue.length;
-        for (let qd of this._queue) {
-            console.log(path.extname(qd));
-            if (this._imgExts.some(x => x === path.extname(qd))) {
+        let keys = this._queue.keys();
+
+        this._loadCount = keys.length;
+
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+
+            if (IMAGE_EXT.some(p => p === path.extname(key))) {
                 let image = new Image();
+
                 let that = this;
-                image.addEventListener("load", () => {
-                    that._loadedCount++;
+                image.onload = () => {
+                    that._loadedCount += 1;
+                    
+                    let callbacks = this._queue.item(key);
+                    for (let c of callbacks) {
+                        c(image);
+                    }
+
                     if (that._loadedCount === that._loadCount) {
                         onComplete();
                     }
-                });
-                image.src = qd;
-                that._cache.add(qd, image);
-            }
-            if (this._audExts.some(x => x === path.extname(qd))) {
-                let audio = new Audio();
-                audio.addEventListener("load", () => {
-                    this._loadedCount++;
-                    if (this._loadedCount === this._loadCount) {
-                        onComplete();
-                    }
-                });
-                audio.src = qd;
-                this._cache.add(qd, audio);
+                }
+                image.src = key;
+                that._cache.add(key, image);
             }
         }
     }

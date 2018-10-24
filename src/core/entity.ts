@@ -1,121 +1,63 @@
-import { Behavior } from "./behavior";
-import { IdGenerator } from "../utils/id-generator";
-import { KeyedCollection } from "../utils/keyed-collection";
+import { ResourceLoader } from "../utils/resource-loader";
+import { Component } from "./component";
 import { Vector2 } from "../math/vector2";
-import { Level } from "./level";
-import { SceneNode } from "./scene-node";
-import { EventEmitter } from "events";
+import { Transform } from "../math/transform";
+import { Scene } from "./scene";
 
-export interface IEntityOptions {
-    name: string;
-    behaviors: Behavior[];
-    position: Vector2;
-}
+export class Entity {
 
-export class Entity extends SceneNode {
+    private _scene: Scene;
 
-    private _id: number = -1;
-    private _name: string = "";
-    private _position: Vector2;
+    private _id: number;
 
-    private _behaviorsById: KeyedCollection<Behavior> = new KeyedCollection<Behavior>();
-    private _behaviorsToUpdate: Behavior[] = [];
+    private readonly _name: string;
+    private readonly _transform: Transform;
 
-    private _idGen: IdGenerator = new IdGenerator();
-    private _eventEmitter: EventEmitter = new EventEmitter();
-
-    private _level: Level;
+    private _components: Component[];
 
     get id(): number {
         return this._id;
     }
+
+    set id(value: number) {
+        this._id = value;
+    }
+
     get name(): string {
         return this._name;
     }
-    get position(): Vector2 {
-        return this._position;
-    }
-    get behaviorCount(): number {
-        return this._behaviorsById.count();
+
+    get transform(): Transform {
+        return this._transform;
     }
 
-    constructor(opt: IEntityOptions) {
-        super();
-        this._name = opt.name;
-
-        for (let b of opt.behaviors) {
-            b._owner = this;
-            this._behaviorsById.add(this._idGen.getId(), b);
-        }
-
-        this._position = opt.position;
+    get scene(): Scene {
+        return this._scene;
     }
 
-    public _setId(id: number): void {
-        this._id = id;
+    set scene(value: Scene) {
+        this.scene = value;
     }
 
-    public _setLevel(level: Level): void {
-        this._level = level;
+    constructor(name: string, position: Vector2, components: Component[]) {
+        this._name = name;
+        this._transform = new Transform();
+        this._transform.localPosition = position;
+        this._components = components;
+
+        this._components.forEach(c => c.owner = this);
     }
 
-    public getLevel(): Level {
-        return this._level;
+    public loadResources(loader: ResourceLoader): void {
+        this._components.forEach(c => c.loadResources(loader));
     }
 
-    public getBehaviorById(id: number): Behavior | null {
-        if (this._behaviorsById.item(id)) {
-            return this._behaviorsById.item(id);
-        }
-        return null;
-    }
-
-    public getBehaviorOfType<T extends Behavior>(tctor: new (...args: any[]) => T): T | null {
-        for (let b of this._behaviorsById.values()) {
+    public getBehaviorOfType<T extends Component>(tctor: new (...args: any[]) => T): T | null {
+        for (let b of this._components) {
             if (b instanceof tctor) {
                 return b as T;
             }
         }
         return null;
-    }
-
-    public preStart(): void {
-        // NOTICE: Calling .values() multiple times per frame
-        for (let b of this._behaviorsById.values()) {
-            if (b.needsUpdate) {
-                this._behaviorsToUpdate.push(b);
-            }
-            b.preStart();
-        }
-    }
-
-    public start(): void {
-        for (let b of this._behaviorsById.values()) {
-            b.start();
-        }
-    }
-
-    public update(dt: number): void {
-        for (let b of this._behaviorsToUpdate) {
-            b.update(dt);
-        }
-    }
-
-    public end(): void {
-        for (let b of this._behaviorsById.values()) {
-            b.end();
-        }
-    }
-
-    public on(event: string, func: (...args: any[]) => void): void {
-        this._eventEmitter.on(event, func);
-    }
-
-    public emit(event: string, ...args: any[]): void {
-        this._eventEmitter.emit(event, args);
-    }
-
-    public off(event: string, func: (...args: any[]) => void): void {
-        this._eventEmitter.off(event, func);
     }
 }

@@ -49,6 +49,10 @@ export class KeyedCollection<T> implements IKeyedCollection<T> {
  
         return values;
     }
+
+    public clear(): void {
+        this._items = [];
+    }
 }
 
 export class StrKeyedCollection<T> implements IKeyedCollection<T> {
@@ -82,12 +86,12 @@ export class StrKeyedCollection<T> implements IKeyedCollection<T> {
         return this._items[key];
     }
  
-    public keys(): number[] {
-        var keySet: number[] = [];
+    public keys(): string[] {
+        var keySet: string[] = [];
  
         for (var prop in this._items) {
             if (this._items.hasOwnProperty(prop)) {
-                keySet.push(+prop);
+                keySet.push(prop);
             }
         }
  

@@ -103,6 +103,7 @@ export enum KeyCode {
 export class Keyboard {
     private static prevKeys: boolean[] = [];
     private static keys: boolean[] = [];
+    private static pressed: boolean[] = [];
 
     static initialize(): void {
         window.addEventListener("keydown", e => {
@@ -111,10 +112,13 @@ export class Keyboard {
         window.addEventListener("keyup", e => {
             this.keys[e.keyCode] = false;
         });
+        window.addEventListener("keypress", e => {
+            this.pressed[e.keyCode] = true;
+        });
     }
 
     static update(): void {
-        this.prevKeys = this.keys;
+        this.pressed.length = 0;
     }
 
     static isKeyDown(code: KeyCode): boolean {
@@ -126,10 +130,6 @@ export class Keyboard {
     }
 
     static isKeyPressed(code: KeyCode): boolean {
-        return this.keys[code] && !this.prevKeys[code];
-    }
-
-    static isKeyReleased(code: KeyCode): boolean {
-        return !this.keys[code] && this.prevKeys[code];
+        return this.pressed[code];
     }
 }
