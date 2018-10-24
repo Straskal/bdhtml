@@ -29,9 +29,8 @@ export class Renderer implements IRenderSystem {
     onEntityRemoved(entity: Entity): void {
         
     }
+
     onEntityModified(entity: Entity): void {
         
     }
-
-
 }
