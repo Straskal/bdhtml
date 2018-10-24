@@ -101,7 +101,6 @@ export enum KeyCode {
 };
 
 export class Keyboard {
-    private static prevKeys: boolean[] = [];
     private static keys: boolean[] = [];
     private static pressed: boolean[] = [];
 
@@ -117,7 +116,7 @@ export class Keyboard {
         });
     }
 
-    static update(): void {
+    static tick(): void {
         this.pressed.length = 0;
     }
 

@@ -12,6 +12,10 @@ export class Renderer implements IRenderSystem {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        
         for (let s of this._spritesById.values()) {
             let pos = s.owner.transform.localPosition;
 

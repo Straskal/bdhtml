@@ -1,6 +1,7 @@
 import { Scene } from "./scene";
 import { ILogicSystem } from "./iLogicSystem";
 import { IRenderSystem } from "./iRenderSystem";
+import { Keyboard } from "../input/keyboard";
 
 export class EngineConfiguration {
 
@@ -31,6 +32,8 @@ export class Engine {
         this._logicSystems = logicSystems;
         this._renderSystems = renderSystems;
 
+        this._now = 0;
+        this._dt = 0;
         this._last = this.timestamp();
     }
 
@@ -50,6 +53,8 @@ export class Engine {
             }
     
             document.body.insertBefore(this._canvas, document.body.childNodes[0]);
+
+            Keyboard.initialize();
     
             // TODO: scene management
             // TODO: remove gross hack. \/
@@ -65,6 +70,8 @@ export class Engine {
         this._now = this.timestamp();
         this._dt = this._dt + Math.min(1, (this._now - this._last) / 1000);
         this._last = this._now;
+
+        Keyboard.tick();
         
         while (this._dt >= Engine.TIME_STEP) {
             this._dt = this._dt - Engine.TIME_STEP;
