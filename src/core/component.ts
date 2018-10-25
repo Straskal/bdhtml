@@ -1,7 +1,8 @@
 import { ResourceLoader } from "../utils/resource-loader";
 import { Entity } from "./entity";
+import { EventEmitter } from "events";
 
-export class Component {
+export class Component extends EventEmitter {
 
     private _owner: Entity;
 

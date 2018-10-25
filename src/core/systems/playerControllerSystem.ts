@@ -4,11 +4,13 @@ import { Player } from "../components/player";
 import { Keyboard, KeyCode } from "../../input/keyboard";
 import { Movement } from "../components/movement";
 import { Vector2 } from "../../math/vector2";
+import { BoxCollider } from "../components/boxCollider";
 
 export class PlayerControllerSystem implements ILogicSystem {
 
     private _player: Player;
     private _playerMovement: Movement;
+    private _playerCollider: BoxCollider;
 
     public tick(dt: number): void {
         if (!this._player)
@@ -39,9 +41,15 @@ export class PlayerControllerSystem implements ILogicSystem {
     public onEntityAdded(entity: Entity): void {
         if (this._player == null) {
             let p = entity.getBehaviorOfType(Player);
+
             if (p !== null) {
                 this._player = p;
                 this._playerMovement = <Movement>entity.getBehaviorOfType(Movement);
+                this._playerCollider = <BoxCollider>entity.getBehaviorOfType(BoxCollider);
+
+                this._playerCollider.on("collision", o => {
+                    console.log("collision with " + o);
+                })
             }
         }
     }

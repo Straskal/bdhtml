@@ -10,4 +10,11 @@ export class Rect {
         this.width = w || 0;
         this.height = h || 0;
     }
+
+    public overlaps(rect: Rect): boolean {
+        return this.x < rect.x + rect.width 
+        && this.x + this.width > rect.x 
+        && this.y < rect.y + rect.height
+        && this.y + this.height > rect.y
+    }
 }
