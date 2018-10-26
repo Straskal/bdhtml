@@ -5,12 +5,15 @@ import { Keyboard, KeyCode } from "../../input/keyboard";
 import { Movement } from "../components/movement";
 import { Vector2 } from "../../math/vector2";
 import { BoxCollider } from "../components/boxCollider";
+import { Sprite } from "../components/sprite";
 
 export class PlayerControllerSystem implements ILogicSystem {
 
     private _player: Player;
     private _playerMovement: Movement;
     private _playerCollider: BoxCollider;
+
+    private _lastFrameShooting = false;
 
     public tick(dt: number): void {
         if (!this._player)
@@ -34,8 +37,28 @@ export class PlayerControllerSystem implements ILogicSystem {
         if (Keyboard.isKeyDown(KeyCode.KEY_D)) {
             v.x += s;
         }
-    }   
-    
+
+        if (!this._lastFrameShooting && Keyboard.isKeyDown(KeyCode.SPACE)) {
+            let scene = this._player.owner.scene;
+            let e = new Entity(
+                "bullet",
+                Vector2.add(this._player.owner.transform.localPosition, new Vector2(0, -64)),
+                [
+                    new Sprite("./assets/player.png"),
+                    new Movement(0, -10),
+                    new BoxCollider(0, 0, 40, 50)
+                ]);
+
+            scene.add(e);
+            scene.tagEntity(e, "bullet");
+
+            this._lastFrameShooting = true;
+        }
+        else if (Keyboard.isKeyUp(KeyCode.SPACE)) {
+            this._lastFrameShooting = false;
+        }
+    }
+
     public fixedTick(): void { }
 
     public onEntityAdded(entity: Entity): void {
@@ -55,10 +78,10 @@ export class PlayerControllerSystem implements ILogicSystem {
     }
 
     public onEntityRemoved(entity: Entity): void {
-        
+
     }
 
     public onEntityModified(entity: Entity): void {
-        
+
     }
 }

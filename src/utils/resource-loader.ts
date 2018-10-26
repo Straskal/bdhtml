@@ -9,6 +9,7 @@ export class ResourceLoader {
     private _queue: StrKeyedCollection<Function[]>;
     private _loadCount: number = 0;
     private _loadedCount: number = 0;
+    private _loaded: boolean = false;
 
     constructor() {
         this._cache = new StrKeyedCollection<any>();
@@ -20,6 +21,11 @@ export class ResourceLoader {
     }
 
     public queue(res: string, callback: (img: HTMLImageElement) => void): void {
+        if (this._loaded) {
+            callback(this._cache.item(res));
+            return;
+        }
+
         if (this._queue.containsKey(res)) {
             let resource = this._queue.item(res);
             resource.push(callback);
@@ -50,6 +56,7 @@ export class ResourceLoader {
 
                     if (that._loadedCount === that._loadCount) {
                         onComplete();
+                        that._loaded = true;
                     }
                 }
                 image.src = key;

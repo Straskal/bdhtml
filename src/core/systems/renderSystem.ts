@@ -19,14 +19,14 @@ export class RenderSystem implements IRenderSystem {
         for (let s of this._spritesById.values()) {
             let pos = s.owner.transform.localPosition;
 
-            ctx.drawImage(s.img, pos.x, pos.y);
+            ctx.drawImage(s.img, Math.floor(pos.x), Math.floor(pos.y));
         }
     }
 
     onEntityAdded(entity: Entity): void {
         let s = entity.getBehaviorOfType(Sprite);
         if (s != null) {
-            this._spritesById.add(s.owner.id, s);
+            this._spritesById.add(s.owner.uid, s);
         }
     }
 

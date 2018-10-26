@@ -6,10 +6,10 @@ export class Movement extends Component {
 
     public velocity: Vector2;
 
-    constructor() {
+    constructor(x?: number, y?: number) {
         super();
 
-        this.velocity = Vector2.zero;
+        this.velocity = new Vector2(x || 0, y || 0);
     }
 
     public loadResources(loader: ResourceLoader): void { }

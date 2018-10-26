@@ -15,12 +15,8 @@ export class Entity {
 
     private _components: Component[];
 
-    get id(): number {
+    get uid(): number {
         return this._id;
-    }
-
-    set id(value: number) {
-        this._id = value;
     }
 
     get name(): string {
@@ -35,17 +31,13 @@ export class Entity {
         return this._scene;
     }
 
-    set scene(value: Scene) {
-        this.scene = value;
-    }
-
     constructor(name: string, position: Vector2, components: Component[]) {
         this._name = name;
         this._transform = new Transform();
         this._transform.localPosition = position;
         this._components = components;
 
-        this._components.forEach(c => c.owner = this);
+        this._components.forEach(c => (<any>c)._owner = this);
     }
 
     public loadResources(loader: ResourceLoader): void {

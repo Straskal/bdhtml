@@ -18,8 +18,8 @@ window.onload = () => {
         [
             new Sprite("./assets/player.png"),
             new Movement(),
-            new Player(10, 30),
-            new BoxCollider(0, 0, 64, 64)
+            new Player(3, 30),
+            new BoxCollider(0, 0, 40, 50)
         ]
     );
 
@@ -28,7 +28,7 @@ window.onload = () => {
         new Vector2(100, 100),
         [
             new Sprite("./assets/player.png"),
-            new BoxCollider(0, 0, 64, 64)
+            new BoxCollider(0, 0, 40, 50)
         ]
     );
 
