@@ -24,7 +24,7 @@ export class MovementSystem implements ILogicSystem {
     }
 
     public onEntityAdded(entity: Entity): void {
-        let s = entity.getBehaviorOfType(Movement);
+        let s = entity.getComponentOfType(Movement);
         if (s != null) {
             this._movementsById.add(s.owner.uid, s);
         }

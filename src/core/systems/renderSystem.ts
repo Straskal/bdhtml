@@ -24,7 +24,7 @@ export class RenderSystem implements IRenderSystem {
     }
 
     onEntityAdded(entity: Entity): void {
-        let s = entity.getBehaviorOfType(Sprite);
+        let s = entity.getComponentOfType(Sprite);
         if (s != null) {
             this._spritesById.add(s.owner.uid, s);
         }

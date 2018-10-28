@@ -6,6 +6,11 @@ import { Movement } from "../components/movement";
 class CollisionPair {
     public coll1: BoxCollider;
     public coll2: BoxCollider;
+
+    constructor(coll1: BoxCollider, coll2: BoxCollider) {
+        this.coll1 = coll1;
+        this.coll2 = coll2;
+    }
 }
 
 export class BruteForceCollisionSystem implements ILogicSystem {
@@ -54,9 +59,7 @@ export class BruteForceCollisionSystem implements ILogicSystem {
                     else {
                         coll.emit("collision", oColl);
                         oColl.emit("collision", coll);
-                        let p = new CollisionPair();
-                        p.coll1 = coll;
-                        p.coll2 = oColl;
+                        let p = new CollisionPair(coll, oColl);
                         this._pairs.add(pair, p);
                     }
                 }
@@ -69,8 +72,8 @@ export class BruteForceCollisionSystem implements ILogicSystem {
 
     private resolve() {
         for (let p of this._pairs.values()) {
-            let m = p.coll1.owner.getBehaviorOfType(Movement);
-            let m2 = p.coll2.owner.getBehaviorOfType(Movement);
+            let m = p.coll1.owner.getComponentOfType(Movement);
+            let m2 = p.coll2.owner.getComponentOfType(Movement);
             if (m) {
                 let rect1 = p.coll1.rect;
                 let rect2 = p.coll2.rect;
@@ -109,7 +112,7 @@ export class BruteForceCollisionSystem implements ILogicSystem {
     }
 
     onEntityAdded(entity: import("c:/Users/Stras/Documents/GitHub/bdhtml/src/core/entity").Entity): void {
-        let c = entity.getBehaviorOfType(BoxCollider);
+        let c = entity.getComponentOfType(BoxCollider);
         if (c != null) {
             this._colliders[entity.uid] = c;
         }

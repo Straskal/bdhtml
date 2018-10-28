@@ -10,6 +10,7 @@ export class Matrix {
         m10: number, m11: number, m12: number,
         m20: number, m21: number, m22: number) {
 
+        this._m = [];
         this._m[0][0] = m00; this._m[0][1] = m01; this._m[0][2] = m02;
         this._m[1][0] = m10; this._m[1][1] = m11; this._m[1][2] = m12;
         this._m[2][0] = m20; this._m[2][1] = m21; this._m[2][2] = m22;

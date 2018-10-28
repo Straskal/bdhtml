@@ -8,11 +8,11 @@ export class Entity {
 
     private _scene: Scene;
 
+    // set by scene
     private _id: number;
 
     private readonly _name: string;
     private readonly _transform: Transform;
-
     private _components: Component[];
 
     get uid(): number {
@@ -31,10 +31,16 @@ export class Entity {
         return this._scene;
     }
 
-    constructor(name: string, position: Vector2, components: Component[]) {
+    constructor(
+        name: string,
+        position: Vector2,
+        components: Component[]) {
+            
         this._name = name;
+
         this._transform = new Transform();
         this._transform.localPosition = position;
+
         this._components = components;
 
         this._components.forEach(c => (<any>c)._owner = this);
@@ -44,9 +50,9 @@ export class Entity {
         this._components.forEach(c => c.loadResources(loader));
     }
 
-    public getBehaviorOfType<T extends Component>(tctor: new (...args: any[]) => T): T | null {
+    public getComponentOfType<T extends Component>(TCtor: new (...args: any[]) => T): T | null {
         for (let b of this._components) {
-            if (b instanceof tctor) {
+            if (b instanceof TCtor) {
                 return b as T;
             }
         }

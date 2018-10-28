@@ -63,12 +63,12 @@ export class PlayerControllerSystem implements ILogicSystem {
 
     public onEntityAdded(entity: Entity): void {
         if (this._player == null) {
-            let p = entity.getBehaviorOfType(Player);
+            let p = entity.getComponentOfType(Player);
 
             if (p !== null) {
                 this._player = p;
-                this._playerMovement = <Movement>entity.getBehaviorOfType(Movement);
-                this._playerCollider = <BoxCollider>entity.getBehaviorOfType(BoxCollider);
+                this._playerMovement = <Movement>entity.getComponentOfType(Movement);
+                this._playerCollider = <BoxCollider>entity.getComponentOfType(BoxCollider);
 
                 this._playerCollider.on("collision", o => {
                     console.log("collision with " + o);
